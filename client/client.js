@@ -89,15 +89,16 @@ function modalTestSave(e){
   modalClose(e);
 }
 
-function testInsert(component, capability, steps){
-  Tests.insert({
-    projectId: SessionAmplify.get('currentProjectId'),
-    component: component,
-    capability: capability,
-    steps: steps,
-    status: "",
-    members: []
-  });
+function projectChange(e){
+  SessionAmplify.set('currentProjectId', $(e.target).val());
+}
+
+function projectDelete(e){
+  if (confirm('Are you sure you want to delete this project? All will be lost forever!')) {
+    Projects.remove(SessionAmplify.get('currentProjectId'));
+    Tests.remove({projectId: SessionAmplify.get('currentProjectId')});
+    SessionAmplify.set('currentProjectId', "");
+  }
 }
 
 function testCheckboxClicked(e){
@@ -116,16 +117,32 @@ function testCheckboxClicked(e){
   Tests.update({_id: testId}, {$set: {members: members}});
 }
 
-function projectChange(e){
-  SessionAmplify.set('currentProjectId', $(e.target).val());
+function testDelete(e){
+  if (confirm("Are you sure? This can't be undone!")){
+    var testId = $(e.target).attr('testId');
+    Tests.remove(testId);
+  }
 }
 
-function projectDelete(e){
-  if (confirm('Are you sure you want to delete this project? All will be lost forever!')) {
-    Projects.remove(SessionAmplify.get('currentProjectId'));
-    Tests.remove({projectId: SessionAmplify.get('currentProjectId')});
-    SessionAmplify.set('currentProjectId', "");
-  }
+function testInsert(component, capability, steps){
+  Tests.insert({
+    projectId: SessionAmplify.get('currentProjectId'),
+    component: component,
+    capability: capability,
+    steps: steps,
+    status: "",
+    members: []
+  });
+}
+
+function testStatusChange(e){
+  var testId = $(e.target).attr('testId');
+  var status = $(e.target).attr('status');
+  var members = Tests.findOne(testId).members;
+  var email = Meteor.user().services.google.email;
+  var emailIndex = $.inArray(email, members);
+  members.splice(emailIndex, 1);
+  Tests.update({_id: testId}, {$set: {status: status, members: members}});
 }
 
 Meteor.subscribe("projects");
@@ -166,6 +183,11 @@ Template.workspace.test = function(){
       {sort: {component: 1, capability: 1, steps: 1, _id: 1}}
       );
 }
+
+Template.workspace.events({
+  'click button.test-status-change': testStatusChange,
+  'click button.test-delete': testDelete
+});
 
 Template.modals.events({
   'click button.modal-close': modalClose,

@@ -53,6 +53,14 @@ div.main, html, body{
 	padding: 0.2em;
 }
 
+.test.pass{
+	background-color: #cce8cc;
+}
+
+.test.fail{
+	background-color: #ffe3e2;
+}
+
 .test-name, .test-members{
 	padding-left: 0.5em;
 }
