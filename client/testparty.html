@@ -1,0 +1,134 @@
+<head>
+  <title>testparty</title>
+</head>
+
+<body>
+	<div class="main flex-col">
+		{{#if authenticated}}
+		<div class="top flex-col tight">
+			<div class="top-top flex-row">
+				<div class="top-top-left tight">{{>project}}</div>
+				{{#if isProjectSelected}}
+					<div class="top-top-right right">{{>commands}}</div>
+				{{/if}}
+			</div>
+			<div class="top-bottom">{{>members}}</div>
+		</div>
+		<div class="middle flex-row">
+			<div class="middle-left container">{{>tests}}</div>
+			<div class="middle-right container">{{>workspace}}</div>
+		</div>
+		{{/if}}
+		<div class="bottom flex-row tight center">
+			<div class="bottom-left flex-col tight">{{>loginButtons}}</div>
+			<div class="bottom-right flex-col right">{{>stats}}</div>
+		</div>
+	</div>
+	{{>modals}}
+</body>
+
+<template name="project">
+	<select>
+		<option value="">Select Project</option>
+		{{#each project}}
+		<option value="{{_id}}" {{selected _id}}>{{name}}</option>
+		{{/each}}
+	</select>
+	<button class="modal-invoke" modal="project">Add Project</button>
+</template>
+
+<template name="commands">
+	<button class="modal-invoke" modal="members">Add Member</button>
+	<button class="modal-invoke" modal="test">Add Test</button>
+	<button class="modal-invoke" modal="import">Import Tests</button>
+	<button>Delete Project</button>
+</template>
+
+<template name="members">
+	{{#each projectMembers}}
+	<span class="member">{{this}}</span>
+	{{/each}}
+</template>
+
+<template name="tests">
+	<div class="tests">
+		{{#each test}}
+		<div class="test flex-row center">
+			<input class="tight" type="checkbox" testId="{{_id}}" {{isTestChecked _id}}/>
+			<span class="test-name tight">{{component}}: {{capability}}</span>
+			<span class="test-members">({{testMembers _id}})</span>
+		</div>
+		{{/each}}
+	</div>
+</template>
+
+<template name="workspace">
+	<div class="work-tests">
+		{{#each test}}
+		<div class="work-test">
+			<div class="work-test-name">{{component}}: {{capability}}</div>
+			<pre class="steps">{{steps}}</pre>
+			<div class="work-test-buttons">
+				<button>Pass</button>
+				<button>Fail</button>
+				<button>Reset</button>
+				<button>Delete</button>
+			</div>
+		</div>
+		{{/each}}
+	</div>
+</template>
+
+<template name="loginButtons">
+	<div class='login'>{{loginButtons}}</div>
+</template>
+
+<template name="stats">
+	<span class="stat">Stat</span>
+</template>
+
+<template name="modals">
+	<div class="modal-screen"></div>
+	<div id="project" class="modal">
+		<div>Add Project</div>
+		<div>
+			<input class="modal-project-name" placeholder="Project Name"/>
+		</div>
+		<button class="modal-project-save">Save</button>
+		<button class="modal-close">Close</button>
+	</div>
+	<div id="member" class="modal">
+		<div>Add Member</div>
+		<div>
+			<input class="modal-member-email" placeholder="Email Address"/>
+		</div>
+		<button class="modal-member-save">Save</button>
+		<button class="modal-close">Close</button>
+	</div>
+	<div id="test" class="modal">
+		<div>Add Test</div>
+		<div>
+			<input class="modal-test-component" placeholder="Component Name"/>
+			<input class="modal-test-capability" placeholder="Capability"/>
+			<textarea class="modal-test-steps" placeholder="Steps"></textarea>
+		</div>
+		<button class="modal-test-save">Save</button>
+		<button class="modal-close">Close</button>
+	</div>
+	<div id="import" class="modal">
+		<div>Import Tests</div>
+		<div>
+			<p>
+				File must be one test per line. Each line must be a json
+				object containing component, capability and steps.
+			<textarea class="modal-import-file">
+{"component": "Main Screen", "capability": "Can Login", "steps": "1) Go to main screen\\n2) Login"}
+{"component": "Main Screen", "capability": "Can Login", "steps": "1) Go to main screen\\n2) Login"}
+{"component": "Main Screen", "capability": "Can Login", "steps": "1) Go to main screen\\n2) Login"}
+{"component": "Main Screen", "capability": "Can Login", "steps": "1) Go to main screen\\n2) Login"}
+			</textarea>
+		</div>
+		<button class="modal-import-save">Save</button>
+		<button class="modal-close">Close</button>
+	</div>
+</template>

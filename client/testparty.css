@@ -1,0 +1,106 @@
+html, body{
+        margin: 0;
+        padding: 0;
+}
+
+div.main, html, body{
+        height: 100%;
+        width: 100%;
+}
+
+.top, .bottom{
+	background-color: #f5f5f5;
+}
+
+.top-top-left, .top-top-right{
+	padding: 0.5em;
+	padding-bottom:0;
+}
+
+.top-bottom{
+	padding: 0.5em;
+}
+
+.middle{
+	border-top: 1px solid #bbb;
+	border-bottom: 1px solid #bbb;
+}
+
+.middle-left{
+	border-right: 1px solid #bbb;
+	width: 30em;
+}
+
+.member{
+	margin-right: 1em;
+	white-space: nowrap;
+}
+
+.login{
+	padding: 0.5em;
+}
+
+.tests, .work-tests{
+	overflow: auto;
+	position: absolute;
+	top:0;
+	right:0;
+	bottom:0;
+	left:0;
+}
+
+.test{
+	padding: 0.2em;
+}
+
+.test-name, .test-members{
+	padding-left: 0.5em;
+}
+
+.test-members{
+	color: darkgrey;
+}
+
+.work-test{
+	padding: 0.5em;
+}
+
+.work-test:nth-child(odd){
+	background-color: #f5f5f5;
+}
+
+.steps{
+	width: 100%;
+	white-space: pre-wrap;
+}
+
+.stat{
+	margin-right:1em;
+}
+
+.right{
+	text-align: right;
+}
+
+.modal{
+	position: absolute;
+	top: 3em;
+	left: 50%;
+	width:24em;
+	margin-left: -12em;
+	background-color: white;
+	border: 0.1em solid #bbb;
+	padding: 0.2em;
+	display: none;
+}
+
+.modal-screen{
+	position: absolute;
+	top:0;
+	left:0;
+	right:0;
+	bottom:0;
+	border:1px solid red;
+	background-color: rgba(255,255,255,0.7);
+	display:none;
+}
