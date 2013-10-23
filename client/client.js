@@ -116,8 +116,16 @@ function testCheckboxClicked(e){
   Tests.update({_id: testId}, {$set: {members: members}});
 }
 
-function changeProject(e){
+function projectChange(e){
   SessionAmplify.set('currentProjectId', $(e.target).val());
+}
+
+function projectDelete(e){
+  if (confirm('Are you sure you want to delete this project? All will be lost forever!')) {
+    Projects.remove(SessionAmplify.get('currentProjectId'));
+    Tests.remove({projectId: SessionAmplify.get('currentProjectId')});
+    SessionAmplify.set('currentProjectId', "");
+  }
 }
 
 Meteor.subscribe("projects");
@@ -135,11 +143,12 @@ Template.project.selected = function(_id){
 
 Template.project.events({
   'click button.modal-invoke': modalInvoke,
-  'change select': changeProject,
+  'change select': projectChange,
 });
 
 Template.commands.events({
   'click button.modal-invoke': modalInvoke,
+  'click button.project-delete': projectDelete,
 });
 
 Template.tests.test = function(){
