@@ -36,6 +36,23 @@ div.main, html, body{
 	white-space: nowrap;
 }
 
+.glyph{
+	display: inline-block;
+}
+
+.glyph:hover{
+	opacity: 0.5;
+}
+
+.glyph.x{
+	height: 10px;
+	width: 10px;
+	background: url(/glyph-x.png) center center no-repeat;
+	margin-right: 0.1em;
+}
+
+
+
 .login{
 	padding: 0.5em;
 }

@@ -38,16 +38,21 @@
 </template>
 
 <template name="commands">
-	<button class="modal-invoke" modal="members">Add Member</button>
+	<button class="modal-invoke" modal="member">Add Member</button>
 	<button class="modal-invoke" modal="test">Add Test</button>
 	<button class="modal-invoke" modal="import">Import Tests</button>
 	<button class="project-delete">Delete Project</button>
 </template>
 
 <template name="members">
+	<div class="flex-row center">
 	{{#each projectMembers}}
-	<span class="member">{{this}}</span>
+	<div class="flex-row tight center">
+		<div class='glyph x member-remove' email="{{this}}"></div>
+		<span class="member">{{this}}</span>
+	</div>
 	{{/each}}
+	</div>
 </template>
 
 <template name="tests">

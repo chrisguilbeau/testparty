@@ -33,6 +33,18 @@ Handlebars.registerHelper("testMembers", function(testId){
     return test.members.join(', ');
 });
 
+function memberRemove(e){
+  var projectId = SessionAmplify.get('currentProjectId');
+  var members = Projects.findOne(projectId).members;
+  var email = $(e.target).attr('email');
+  var emailIndex = $.inArray(email, members);
+  members.splice(emailIndex, 1);
+  Projects.update({_id: projectId}, {$set: {members: members}});
+  if (email == Meteor.user().services.google.email)
+    SessionAmplify.set('currentProjectId', "");
+
+}
+
 function modalInvoke(e){
   $('.modal-screen').show();
   $('.modal#' + $(e.target).attr('modal')).show(100);
@@ -161,6 +173,10 @@ Template.project.selected = function(_id){
 Template.project.events({
   'click button.modal-invoke': modalInvoke,
   'change select': projectChange,
+});
+
+Template.members.events({
+  'click div.member-remove': memberRemove
 });
 
 Template.commands.events({
