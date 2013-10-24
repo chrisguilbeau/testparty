@@ -166,6 +166,16 @@ function testInsert(component, capability, steps){
   });
 }
 
+function testResetAll(e){
+  if (confirm("Are you sure you want to reset all the tests? This can't be undone!")){
+    Tests.find({projectId: SessionAmplify.get('currentProjectId')}).forEach(
+      function(test){
+        Tests.update({_id: test._id}, {$set: {status: ""}});
+      }
+      );
+  }
+}
+
 function testStatusChange(e){
   var testId = $(e.target).attr('testId');
   var status = $(e.target).attr('status');
@@ -193,7 +203,7 @@ Template.project.selected = function(_id){
 
 Template.project.events({
   'click button.modal-invoke': modalInvoke,
-  'change select': projectChange,
+  'change select': projectChange
 });
 
 Template.members.events({
@@ -202,7 +212,8 @@ Template.members.events({
 
 Template.commands.events({
   'click button.modal-invoke': modalInvoke,
-  'click button.project-delete': projectDelete,
+  'click button.test-reset-all': testResetAll,
+  'click button.project-delete': projectDelete
 });
 
 Template.stats.tests = function(){
