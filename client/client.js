@@ -120,6 +120,18 @@ function projectDelete(e){
   }
 }
 
+function stepsEdit(e){
+  $(e.target).attr('contenteditable', true);
+}
+
+function stepsEditCommit(e){
+  var steps = $(e.target)
+  var testId = steps.attr('testId');
+  var text = steps.html().replace('<div>', '\n').replace('</div>', '');
+  Tests.update({_id: testId}, {$set: {steps: text}});
+  steps.attr('contenteditable', false);
+}
+
 function testCheckboxClicked(e){
   var checkbox = $(e.target);
   var checked = checkbox.prop('checked');
@@ -223,7 +235,9 @@ Template.workspace.test = function(){
 
 Template.workspace.events({
   'click button.test-status-change': testStatusChange,
-  'click button.test-delete': testDelete
+  'click button.test-delete': testDelete,
+  'dblclick pre.steps': stepsEdit,
+  'blur pre.steps': stepsEditCommit
 });
 
 Template.modals.events({
