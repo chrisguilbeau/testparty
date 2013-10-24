@@ -23,7 +23,17 @@ Meteor.publish(
 
 Meteor.publish(
   "tests",
-  function(){
-    return Tests.find();
+  function(currentProjectId){
+    userId = this.userId;
+    if (userId){
+      var user = Meteor.users.findOne(this.userId);
+      var projectIds = [];
+      Projects.find({members : user.services.google.email}).forEach(
+        function(project){
+          projectIds.push(project._id);
+        }
+        );
+      return Tests.find({projectId: currentProjectId, projectId: {$in: projectIds}});
+    }
   }
 );

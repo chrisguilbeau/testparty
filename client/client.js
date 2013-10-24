@@ -165,7 +165,9 @@ function testStatusChange(e){
 }
 
 Meteor.subscribe("projects");
-Meteor.subscribe("tests");
+Deps.autorun(function () {
+  Meteor.subscribe("tests", SessionAmplify.get("currentProjectId"));
+});
 Meteor.subscribe("currentUserData");
 
 Template.project.project = function(){
