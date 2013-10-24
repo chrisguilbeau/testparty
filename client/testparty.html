@@ -21,7 +21,7 @@
 		{{/if}}
 		<div class="bottom flex-row tight center">
 			<div class="bottom-left flex-col tight">{{>loginButtons}}</div>
-			<div class="bottom-right flex-col right">{{>stats}}</div>
+			<div class="bottom-right right">{{>stats}}</div>
 		</div>
 	</div>
 	{{>modals}}
@@ -89,7 +89,9 @@
 </template>
 
 <template name="stats">
-	<span class="stat">Stat</span>
+	<span class="stat">Tests: {{tests}}</span>
+	<span class="stat">Passed: {{passed}}</span>
+	<span class="stat">Failed: {{failed}}</span>
 </template>
 
 <template name="modals">

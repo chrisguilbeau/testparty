@@ -27,13 +27,3 @@ Meteor.publish(
     return Tests.find();
   }
 );
-
-Meteor.methods({
-  createProject: function(name){
-    Projects.insert({
-      name: name,
-      members: [Meteor.user().services.google.email]
-      });
-    return 0;
-  }
-});

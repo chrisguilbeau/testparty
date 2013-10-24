@@ -17,7 +17,8 @@ Handlebars.registerHelper("isProjectSelected", function() {
 });
 
 Handlebars.registerHelper("isTestChecked", function(testId) {
-  if ($.inArray(Meteor.user().services.google.email, Tests.findOne(testId).members) > -1)
+  var test = Tests.findOne(testId);
+  if (test && $.inArray(Meteor.user().services.google.email, test.members) > -1)
     return "checked";
 });
 
@@ -62,7 +63,6 @@ function modalGetVal(e, className){
 }
 
 function modalImportSave(e){
-  alert(1);
   var fileText = modalGetVal(e, 'modal-import-file');
   $.each(fileText.split('\n'), function(i, line){
     if ($.trim(line)){
@@ -76,7 +76,11 @@ function modalImportSave(e){
 function modalProjectSave(e){
   var name = modalGetVal(e, 'modal-project-name');
   // TODO: Validation?
-  Meteor.call("createProject", name);
+  var projectId = Projects.insert({
+    name: name,
+    members: [Meteor.user().services.google.email]
+    });
+  SessionAmplify.set('currentProjectId', projectId);
   modalClose(e);
 }
 
@@ -107,8 +111,11 @@ function projectChange(e){
 
 function projectDelete(e){
   if (confirm('Are you sure you want to delete this project? All will be lost forever!')) {
+    tests = Tests.find({projectId: SessionAmplify.get('currentProjectId')});
+    tests.forEach(function(test){
+      Tests.remove(test._id)
+    });
     Projects.remove(SessionAmplify.get('currentProjectId'));
-    Tests.remove({projectId: SessionAmplify.get('currentProjectId')});
     SessionAmplify.set('currentProjectId', "");
   }
 }
@@ -183,6 +190,18 @@ Template.commands.events({
   'click button.modal-invoke': modalInvoke,
   'click button.project-delete': projectDelete,
 });
+
+Template.stats.tests = function(){
+  return Tests.find({projectId: SessionAmplify.get('currentProjectId')}).count();
+}
+
+Template.stats.passed = function(){
+  return Tests.find({projectId: SessionAmplify.get('currentProjectId'), status: "pass"}).count();
+}
+
+Template.stats.failed = function(){
+  return Tests.find({projectId: SessionAmplify.get('currentProjectId'), status: "fail"}).count();
+}
 
 Template.tests.test = function(){
   return Tests.find({projectId: SessionAmplify.get('currentProjectId')}, {sort: {component: 1, capability: 1, steps: 1, _id: 1}});
