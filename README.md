@@ -11,10 +11,10 @@
 ```
 A real-time, collaborative test case manager.
 
-This is written in meteor and trys to be as simple as it gets. It was developed
-in meteor and uses google for authentication.
+This is written in meteor and trys to be as simple as it gets.
 
 Basic Idea:
+Login using a google account
 Create a project, or join an existing one
 Add Test cases to the project
 Click on tests to add them to your workspace
