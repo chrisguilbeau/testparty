@@ -30,8 +30,13 @@ Handlebars.registerHelper("projectMembers", function(){
 
 Handlebars.registerHelper("testMembers", function(testId){
   var test = Tests.findOne(testId);
-  if (test)
-    return test.members.join(', ');
+  if (test){
+    var members = [];
+    $(test.members).each(function(i, member){
+        members.push(member.split("@")[0]);
+        });
+    return members.join(', ');
+  }
 });
 
 function memberRemove(e){
@@ -209,6 +214,10 @@ Template.project.events({
 Template.members.events({
   'click div.member-remove': memberRemove
 });
+
+Template.members.formatMember = function(email){
+    return email.split("@")[0]
+}
 
 Template.commands.events({
   'click button.modal-invoke': modalInvoke,
