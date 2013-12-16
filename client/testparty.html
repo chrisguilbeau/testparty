@@ -50,7 +50,7 @@
 	{{#each projectMembers}}
 	<div class="flex-row tight center">
 		<div class='glyph x member-remove' email="{{this}}"></div>
-		<span class="member">{{this}}</span>
+		<span class="member" title="{{this}}">{{formatMember this}}</span>
 	</div>
 	{{/each}}
 	</div>
