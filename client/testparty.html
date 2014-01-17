@@ -72,7 +72,10 @@
 	<div class="work-tests">
 		{{#each test}}
 		<div class="work-test">
-			<div class="work-test-name">{{component}}: {{capability}}</div>
+			<div class="work-test-name">
+                <span class="work-test-name-component" testId="{{_id}}">{{component}}</span>:
+                <span class="work-test-name-capability" testId="{{_id}}">{{capability}}</span>
+            </div>
 			<pre class="steps" testId="{{_id}}">{{steps}}</pre>
 			<div class="work-test-buttons">
 				<button class="test-status-change" testId="{{_id}}" status="pass">Pass</button>

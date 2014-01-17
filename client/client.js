@@ -130,11 +130,35 @@ function stepsEdit(e){
 }
 
 function stepsEditCommit(e){
-  var steps = $(e.target)
+  var steps = $(e.target);
   var testId = steps.attr('testId');
   var text = steps.html().replace('<div>', '\n').replace('</div>', '');
   Tests.update({_id: testId}, {$set: {steps: text}});
   steps.attr('contenteditable', false);
+}
+
+function testCapabilityEdit(e){
+    $(e.target).attr('contenteditable', true);
+}
+
+function testCapabilityEditCommit(e){
+    var cap = $(e.target);
+    var testId = cap.attr('testId');
+    var text = cap.text();
+    Tests.update({_id: testId}, {$set: {capability: text}});
+    cap.attr('contenteditable', false);
+}
+
+function testComponentEdit(e){
+    $(e.target).attr('contenteditable', true);
+}
+
+function testComponentEditCommit(e){
+    var comp = $(e.target);
+    var testId = comp.attr('testId');
+    var text = comp.text();
+    Tests.update({_id: testId}, {$set: {component: text}});
+    comp.attr('contenteditable', false);
 }
 
 function testCheckboxClicked(e){
@@ -256,6 +280,10 @@ Template.workspace.test = function(){
 Template.workspace.events({
   'click button.test-status-change': testStatusChange,
   'click button.test-delete': testDelete,
+  'dblclick span.work-test-name-component': testComponentEdit,
+  'blur span.work-test-name-component': testComponentEditCommit,
+  'dblclick span.work-test-name-capability': testCapabilityEdit,
+  'blur span.work-test-name-capability': testCapabilityEditCommit,
   'dblclick pre.steps': stepsEdit,
   'blur pre.steps': stepsEditCommit
 });
