@@ -126,7 +126,10 @@ function projectDelete(e){
 }
 
 function stepsEdit(e){
-  $(e.target).attr('contenteditable', true);
+    var el = $(e.target);
+    if (!el.hasClass('steps'))
+        el = el.parents('.steps');
+    el.attr('contenteditable', true);
 }
 
 function stepsEditCommit(e){
@@ -295,8 +298,8 @@ Template.workspace.events({
   'blur span.work-test-name-component': testComponentEditCommit,
   'dblclick span.work-test-name-capability': testCapabilityEdit,
   'blur span.work-test-name-capability': testCapabilityEditCommit,
-  'dblclick .steps': stepsEdit,
-  'blur .steps': stepsEditCommit
+  'dblclick div.steps': stepsEdit,
+  'blur div.steps': stepsEditCommit
 });
 
 Template.modals.events({
