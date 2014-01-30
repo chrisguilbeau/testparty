@@ -132,7 +132,7 @@ function stepsEdit(e){
 function stepsEditCommit(e){
   var steps = $(e.target);
   var testId = steps.attr('testId');
-  var text = steps.html().replace('<div>', '\n').replace('</div>', '');
+  var text = steps.html()
   Tests.update({_id: testId}, {$set: {steps: text}});
   steps.attr('contenteditable', false);
 }
@@ -269,6 +269,17 @@ Template.tests.events({
   'click input[type=checkbox]': testCheckboxClicked
 });
 
+Template.workspace.format = function(text){
+    if (text.length > 0)
+        return text
+    else return ' -- ';
+}
+
+Template.workspace.formatSteps = function(steps){
+    console.log(steps);
+    return steps.replace('\n', '<br>');
+}
+
 Template.workspace.test = function(){
   if (Meteor.user().services)
     return Tests.find(
@@ -284,8 +295,8 @@ Template.workspace.events({
   'blur span.work-test-name-component': testComponentEditCommit,
   'dblclick span.work-test-name-capability': testCapabilityEdit,
   'blur span.work-test-name-capability': testCapabilityEditCommit,
-  'dblclick pre.steps': stepsEdit,
-  'blur pre.steps': stepsEditCommit
+  'dblclick .steps': stepsEdit,
+  'blur .steps': stepsEditCommit
 });
 
 Template.modals.events({
