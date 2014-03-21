@@ -129,17 +129,15 @@
 	<div id="import" class="modal">
 		<div>Import Tests</div>
 		<div>
-			<p>
-				File must be one test per line. Each line must be a json
-				object containing component, capability and steps.
-			<textarea class="modal-import-file">
-{"component": "Main Screen", "capability": "Can Login", "steps": "1) Go to main screen\\n2) Login"}
-{"component": "Main Screen", "capability": "Can Login", "steps": "1) Go to main screen\\n2) Login"}
-{"component": "Main Screen", "capability": "Can Login", "steps": "1) Go to main screen\\n2) Login"}
-{"component": "Main Screen", "capability": "Can Login", "steps": "1) Go to main screen\\n2) Login"}
-			</textarea>
+            <p>
+                File must be a csv with no header row. The columns are
+                component, capability, step. There should be one
+                test per line
+            <br>
+            <br>
+            <input type='file' class='modal-import-file'>
 		</div>
-		<button class="modal-import-save">Save</button>
+		<button class="modal-import-save">Import</button>
 		<button class="modal-close">Close</button>
 	</div>
 </template>

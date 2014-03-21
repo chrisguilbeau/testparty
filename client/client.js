@@ -68,14 +68,20 @@ function modalGetVal(e, className){
 }
 
 function modalImportSave(e){
-  var fileText = modalGetVal(e, 'modal-import-file');
-  $.each(fileText.split('\n'), function(i, line){
-    if ($.trim(line)){
-      var obj = JSON.parse(line);
-      testInsert(obj.component, obj.capability, obj.steps);
+    var fileInput = $('.modal-import-file')[0].files;
+    var file = fileInput[0];
+    var reader = new FileReader();
+    reader.onload = function(e) {
+        var content = reader.result;
+        var tests = content.csvToArray({rSep: '\n'});
+        console.log(tests);
+        $.each(tests, function(i, test){
+                testInsert(test[0], test[1], test[2]);
+            }
+            );
     }
-  });
-  modalClose(e);
+    reader.readAsText(file);
+    modalClose(e);
 }
 
 function modalProjectSave(e){
@@ -309,3 +315,4 @@ Template.modals.events({
   'click button.modal-test-save': modalTestSave,
   'click button.modal-import-save': modalImportSave
 });
+
