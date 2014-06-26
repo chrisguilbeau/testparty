@@ -221,7 +221,7 @@ function testStatusChange(e){
   var email = Meteor.user().services.google.email;
   var emailIndex = $.inArray(email, members);
   members.splice(emailIndex, 1);
-  Tests.update({_id: testId}, {$set: {status: status, members: members}});
+  Tests.update({_id: testId}, {$set: {status: status, members: members, statusSetBy: email}});
 }
 
 Meteor.subscribe("projects");
@@ -250,6 +250,29 @@ Template.members.events({
 
 Template.members.formatMember = function(email){
     return email.split("@")[0]
+}
+
+Template.members.score = function(email){
+    var pass = Tests.find({statusSetBy: email, status: 'pass'}).count();
+    var fail = Tests.find({statusSetBy: email, status: 'fail'}).count();
+    var num = pass + fail;
+    return num
+}
+
+Template.members.pos = function(email){
+    var size = 34;
+    var cols = 14;
+    var num = Template.members.score(email);
+    function getPos(){
+        function getRow(){
+            return Math.floor(num/cols);
+        }
+        function getCol(){
+            return num % cols;
+        }
+        return getCol() * -1 * size + 'px ' + getRow() * -1 * size + 'px';
+    }
+    return getPos();
 }
 
 Template.commands.events({

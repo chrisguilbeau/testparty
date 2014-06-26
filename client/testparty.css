@@ -3,6 +3,17 @@ html, body{
         padding: 0;
 }
 
+.item{
+    height: 34px;
+    width: 34px;
+    background: url(/items2.png) 0 0;
+}
+
+.score{
+    text-align: center;
+    font-size: 60%;
+}
+
 div.main, html, body{
         height: 100%;
         width: 100%;
@@ -19,6 +30,7 @@ div.main, html, body{
 
 .top-bottom{
 	padding: 0.5em;
+    padding-bottom: 0;
 }
 
 .middle{
@@ -31,8 +43,15 @@ div.main, html, body{
 	width: 30em;
 }
 
+.membercontainer{
+    border-right: 0.2em solid #ddd;
+    padding: 0.3em;
+    padding-bottom: 0;
+}
+
 .member{
-	margin-right: 1em;
+	/* margin-right: 1em; */
+    margin: 0.3em;
 	white-space: nowrap;
 }
 
@@ -48,7 +67,6 @@ div.main, html, body{
 	height: 10px;
 	width: 10px;
 	background: url(/glyph-x.png) center center no-repeat;
-	margin-right: 0.1em;
 }
 
 
