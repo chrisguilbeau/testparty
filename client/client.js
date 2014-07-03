@@ -307,6 +307,10 @@ Template.workspace.format = function(text){
     else return ' -- ';
 }
 
+Template.workspace.statusSetBy = function(testId){
+    return Tests.findOne({_id: testId}).statusSetBy;
+}
+
 Template.workspace.formatSteps = function(steps){
     console.log(steps);
     return steps.replace('\n', '<br>');
