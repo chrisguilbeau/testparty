@@ -250,20 +250,22 @@ Template.members.events({
   'click div.member-remove': memberRemove
 });
 
+function get_score(email){
+    var pass = Tests.find({statusSetBy: email, status: 'pass'}).count();
+    var fail = Tests.find({statusSetBy: email, status: 'fail'}).count();
+    var num = pass + fail;
+    return num
+}
+
 Template.members.helpers({
     formatMember : function(email){
         return email.split("@")[0]
     },
-    score : function(email){
-        var pass = Tests.find({statusSetBy: email, status: 'pass'}).count();
-        var fail = Tests.find({statusSetBy: email, status: 'fail'}).count();
-        var num = pass + fail;
-        return num
-    },
+    score : get_score,
     pos : function(email){
         var size = 34;
         var cols = 14;
-        var num = Template.members.helpers.score(email);
+        var num = get_score(email);
         function getPos(){
             function getRow(){
                 return Math.floor(num/cols);
