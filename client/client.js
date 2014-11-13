@@ -208,7 +208,7 @@ function testResetAll(e){
   if (confirm("Are you sure you want to reset all the tests? This can't be undone!")){
     Tests.find({projectId: SessionAmplify.get('currentProjectId')}).forEach(
       function(test){
-        Tests.update({_id: test._id}, {$set: {status: ""}});
+        Tests.update({_id: test._id}, {$set: {members: [], status: "", statusSetBy: ""}});
       }
       );
   }
@@ -221,6 +221,7 @@ function testStatusChange(e){
   var email = Meteor.user().services.google.email;
   var emailIndex = $.inArray(email, members);
   members.splice(emailIndex, 1);
+  if (status == '') email = '';
   Tests.update({_id: testId}, {$set: {status: status, members: members, statusSetBy: email}});
 }
 
@@ -230,14 +231,15 @@ Deps.autorun(function () {
 });
 Meteor.subscribe("currentUserData");
 
-Template.project.project = function(){
-  return Projects.find();
-}
-
-Template.project.selected = function(_id){
-  if (_id == SessionAmplify.get("currentProjectId"))
-    return "selected"
-}
+Template.project.helpers({
+    project : function(){
+      return Projects.find();
+    },
+    selected : function(_id){
+      if (_id == SessionAmplify.get("currentProjectId"))
+        return "selected"
+    }
+});
 
 Template.project.events({
   'click button.modal-invoke': modalInvoke,
@@ -248,32 +250,32 @@ Template.members.events({
   'click div.member-remove': memberRemove
 });
 
-Template.members.formatMember = function(email){
-    return email.split("@")[0]
-}
-
-Template.members.score = function(email){
-    var pass = Tests.find({statusSetBy: email, status: 'pass'}).count();
-    var fail = Tests.find({statusSetBy: email, status: 'fail'}).count();
-    var num = pass + fail;
-    return num
-}
-
-Template.members.pos = function(email){
-    var size = 34;
-    var cols = 14;
-    var num = Template.members.score(email);
-    function getPos(){
-        function getRow(){
-            return Math.floor(num/cols);
+Template.members.helpers({
+    formatMember : function(email){
+        return email.split("@")[0]
+    },
+    score : function(email){
+        var pass = Tests.find({statusSetBy: email, status: 'pass'}).count();
+        var fail = Tests.find({statusSetBy: email, status: 'fail'}).count();
+        var num = pass + fail;
+        return num
+    },
+    pos : function(email){
+        var size = 34;
+        var cols = 14;
+        var num = Template.members.helpers.score(email);
+        function getPos(){
+            function getRow(){
+                return Math.floor(num/cols);
+            }
+            function getCol(){
+                return num % cols;
+            }
+            return getCol() * -1 * size + 'px ' + getRow() * -1 * size + 'px';
         }
-        function getCol(){
-            return num % cols;
-        }
-        return getCol() * -1 * size + 'px ' + getRow() * -1 * size + 'px';
+        return getPos();
     }
-    return getPos();
-}
+});
 
 Template.commands.events({
   'click button.modal-invoke': modalInvoke,

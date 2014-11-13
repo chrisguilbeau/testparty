@@ -20,7 +20,9 @@
 		</div>
 		{{/if}}
 		<div class="bottom flex-row tight center">
-			<div class="bottom-left flex-col tight">{{>loginButtons}}</div>
+			<div class="bottom-left flex-col tight">
+                <div class='login'>{{>loginButtons}}</div>
+            </div>
 			<div class="bottom-right right">{{>stats}}</div>
 		</div>
 	</div>
@@ -52,6 +54,7 @@
 		<div class='glyph x member-remove' email="{{this}}"></div>
 		<span class="member" title="{{this}}">{{formatMember this}}</span>
         <div class='item flex-col' style='background-position: {{pos this}};'>
+            {{pos this}}
             <div></div>
             <div class='flex-row tight'>
                 <div></div>
@@ -66,10 +69,15 @@
 <template name="tests">
 	<div class="tests">
 		{{#each test}}
-		<div class="test flex-row center {{status}}">
-			<input class="tight" type="checkbox" testId="{{_id}}" {{isTestChecked _id}}/>
-			<span class="test-name tight">{{component}}: {{capability}}</span>
-			<span class="test-members">({{testMembers _id}})</span>
+		<div class="test flex-column center {{status}}">
+            <div class='flex-row'>
+                <input class="tight" type="checkbox" testId="{{_id}}" {{isTestChecked _id}}/>
+                <span class="test-name tight">{{component}}: {{capability}}</span>
+                <span class="test-members">({{testMembers _id}})</span>
+            </div>
+            {{#if statusSetBy}}
+                <span class='status-set-by'>status set by: {{statusSetBy}}</span>
+            {{/if}}
 		</div>
 		{{/each}}
 	</div>
@@ -96,10 +104,6 @@
 		</div>
 		{{/each}}
 	</div>
-</template>
-
-<template name="loginButtons">
-	<div class='login'>{{loginButtons}}</div>
 </template>
 
 <template name="stats">
@@ -143,6 +147,7 @@
                 File must be a csv with no header row. The columns are
                 component, capability, step. There should be one
                 test per line
+            </p>
             <br>
             <br>
             <input type='file' class='modal-import-file'>
