@@ -196,7 +196,7 @@ function testCommentAdd(e){
         var user = email.split("@")[0];
         var d = new Date();
         var datetime =  d.toLocaleTimeString()  + ' ' + d.toDateString();
-        comments = '[' + user + '] ' + input.val() + '\n' + datetime + '\n\n' + comments;
+        comments += user + ' ' + datetime + '\n- ' + input.val() + '\n\n';
         Tests.update({_id: testId}, {$set: {comments: comments}});
         input.val('');
     }

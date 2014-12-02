@@ -86,6 +86,9 @@ div.main, html, body{
     color: #777;
     font-size: 80%;
     white-space: pre-wrap;
+    padding: 0;
+    margin: 0;
+    margin-top: 1em;
 }
 
 .test-commenter{
