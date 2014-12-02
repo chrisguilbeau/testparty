@@ -97,9 +97,12 @@
 				<button class="test-status-change" testId="{{_id}}" status="">Reset</button>
 				<button class="test-delete" testId="{{_id}}">Delete</button>
 			</div>
-            <div>
-            Status set by: {{statusSetBy _id}}
-            </div>
+            <pre class='test-comments'>{{comments}}</pre>
+            <input testId="{{_id}}" class='test-commenter'
+                placeholder='Add comment...'/>
+            <!-- <div> -->
+            <!-- Status set by: {{statusSetBy _id}} -->
+            <!-- </div> -->
 		</div>
 		{{/each}}
 	</div>

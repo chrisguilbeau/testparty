@@ -81,6 +81,17 @@ div.main, html, body{
 	padding: 0.5em;
 }
 
+.test-comments{
+    padding: 0.2em;
+    color: #777;
+    font-size: 80%;
+    white-space: pre-wrap;
+}
+
+.test-commenter{
+    width: 90%;
+}
+
 .tests, .work-tests{
 	overflow: auto;
 	position: absolute;

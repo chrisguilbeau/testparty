@@ -186,6 +186,22 @@ function testCheckboxClicked(e){
   Tests.update({_id: testId}, {$set: {members: members}});
 }
 
+function testCommentAdd(e){
+    if (e.which == 13){
+        var input = $(e.target);
+        var testId = input.attr('testId');
+        var comments = Tests.findOne(testId).comments;
+        if (!comments) comments = '';
+        var email = Meteor.user().services.google.email;
+        var user = email.split("@")[0];
+        var d = new Date();
+        var datetime =  d.toLocaleTimeString()  + ' ' + d.toDateString();
+        comments = '[' + user + '] ' + input.val() + '\n' + datetime + '\n\n' + comments;
+        Tests.update({_id: testId}, {$set: {comments: comments}});
+        input.val('');
+    }
+}
+
 function testDelete(e){
   if (confirm("Are you sure? This can't be undone!")){
     var testId = $(e.target).attr('testId');
@@ -200,6 +216,7 @@ function testInsert(component, capability, steps){
     capability: capability,
     steps: steps,
     status: "",
+    comments: "",
     members: []
   });
 }
@@ -208,21 +225,24 @@ function testResetAll(e){
   if (confirm("Are you sure you want to reset all the tests? This can't be undone!")){
     Tests.find({projectId: SessionAmplify.get('currentProjectId')}).forEach(
       function(test){
-        Tests.update({_id: test._id}, {$set: {members: [], status: "", statusSetBy: ""}});
+        Tests.update({_id: test._id}, {$set: {members: [], status: "", comments:"", statusSetBy: ""}});
       }
       );
   }
 }
 
 function testStatusChange(e){
-  var testId = $(e.target).attr('testId');
-  var status = $(e.target).attr('status');
-  var members = Tests.findOne(testId).members;
-  var email = Meteor.user().services.google.email;
-  var emailIndex = $.inArray(email, members);
-  members.splice(emailIndex, 1);
-  if (status == '') email = '';
-  Tests.update({_id: testId}, {$set: {status: status, members: members, statusSetBy: email}});
+    var testId = $(e.target).attr('testId');
+    var status = $(e.target).attr('status');
+    var members = Tests.findOne(testId).members;
+    var email = Meteor.user().services.google.email;
+    var emailIndex = $.inArray(email, members);
+    members.splice(emailIndex, 1);
+    if (status == '') {
+        email = '';
+        Tests.update({_id: testId}, {$set: {comments: ''}});
+    }
+    Tests.update({_id: testId}, {$set: {status: status, members: members, statusSetBy: email}});
 }
 
 Meteor.subscribe("projects");
@@ -329,6 +349,7 @@ Template.workspace.test = function(){
 }
 
 Template.workspace.events({
+  'keypress input.test-commenter': testCommentAdd,
   'click button.test-status-change': testStatusChange,
   'click button.test-delete': testDelete,
   'dblclick span.work-test-name-component': testComponentEdit,
