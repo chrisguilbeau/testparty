@@ -37,7 +37,7 @@ function memberRemove(e){
   members.splice(emailIndex, 1);
   Projects.update({_id: projectId}, {$set: {members: members}});
   if (email == Meteor.user().services.google.email)
-    Session.set('currentProjectId', "");
+    Session.setPersistent('currentProjectId', "");
 
 }
 
@@ -81,7 +81,7 @@ function modalProjectSave(e){
     name: name,
     members: [Meteor.user().services.google.email]
     });
-  Session.set('currentProjectId', projectId);
+  Session.setPersistent('currentProjectId', projectId);
   modalClose(e);
 }
 
@@ -107,7 +107,7 @@ function modalTestSave(e){
 }
 
 function projectChange(e){
-  Session.set('currentProjectId', $(e.target).val());
+  Session.setPersistent('currentProjectId', $(e.target).val());
 }
 
 function projectDelete(e){
@@ -117,7 +117,7 @@ function projectDelete(e){
       Tests.remove(test._id)
     });
     Projects.remove(Session.get('currentProjectId'));
-    Session.set('currentProjectId', "");
+    Session.setPersistent('currentProjectId', "");
   }
 }
 
