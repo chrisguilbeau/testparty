@@ -1,19 +1,9 @@
-SessionAmplify = _.extend({}, Session, {
-  keys: _.object(_.map(amplify.store(), function(value, key) {
-    return [key, JSON.stringify(value)]
-  })),
-  set: function (key, value) {
-    Session.set.apply(this, arguments);
-    amplify.store(key, value);
-  },
-});
-
 Handlebars.registerHelper("authenticated", function() {
   return !!Meteor.user();
 });
 
 Handlebars.registerHelper("isProjectSelected", function() {
-  return !!SessionAmplify.get("currentProjectId");
+  return !!Session.get("currentProjectId");
 });
 
 Handlebars.registerHelper("isTestChecked", function(testId) {
@@ -23,7 +13,7 @@ Handlebars.registerHelper("isTestChecked", function(testId) {
 });
 
 Handlebars.registerHelper("projectMembers", function(){
-  var proj = Projects.findOne({_id: SessionAmplify.get("currentProjectId")});
+  var proj = Projects.findOne({_id: Session.get("currentProjectId")});
   if (proj)
     return proj.members;
 });
@@ -40,14 +30,14 @@ Handlebars.registerHelper("testMembers", function(testId){
 });
 
 function memberRemove(e){
-  var projectId = SessionAmplify.get('currentProjectId');
+  var projectId = Session.get('currentProjectId');
   var members = Projects.findOne(projectId).members;
   var email = $(e.target).attr('email');
   var emailIndex = $.inArray(email, members);
   members.splice(emailIndex, 1);
   Projects.update({_id: projectId}, {$set: {members: members}});
   if (email == Meteor.user().services.google.email)
-    SessionAmplify.set('currentProjectId', "");
+    Session.set('currentProjectId', "");
 
 }
 
@@ -91,13 +81,13 @@ function modalProjectSave(e){
     name: name,
     members: [Meteor.user().services.google.email]
     });
-  SessionAmplify.set('currentProjectId', projectId);
+  Session.set('currentProjectId', projectId);
   modalClose(e);
 }
 
 function modalMemberSave(e){
   var email = modalGetVal(e, 'modal-member-email');
-  var currentProjectId = SessionAmplify.get('currentProjectId');
+  var currentProjectId = Session.get('currentProjectId');
   var members = Projects.findOne(currentProjectId).members;
   if ($.inArray(email, members) == -1){
     members.push(email);
@@ -117,17 +107,17 @@ function modalTestSave(e){
 }
 
 function projectChange(e){
-  SessionAmplify.set('currentProjectId', $(e.target).val());
+  Session.set('currentProjectId', $(e.target).val());
 }
 
 function projectDelete(e){
   if (confirm('Are you sure you want to delete this project? All will be lost forever!')) {
-    tests = Tests.find({projectId: SessionAmplify.get('currentProjectId')});
+    tests = Tests.find({projectId: Session.get('currentProjectId')});
     tests.forEach(function(test){
       Tests.remove(test._id)
     });
-    Projects.remove(SessionAmplify.get('currentProjectId'));
-    SessionAmplify.set('currentProjectId', "");
+    Projects.remove(Session.get('currentProjectId'));
+    Session.set('currentProjectId', "");
   }
 }
 
@@ -211,7 +201,7 @@ function testDelete(e){
 
 function testInsert(component, capability, steps){
   Tests.insert({
-    projectId: SessionAmplify.get('currentProjectId'),
+    projectId: Session.get('currentProjectId'),
     component: component,
     capability: capability,
     steps: steps,
@@ -223,7 +213,7 @@ function testInsert(component, capability, steps){
 
 function testResetAll(e){
   if (confirm("Are you sure you want to reset all the tests? This can't be undone!")){
-    Tests.find({projectId: SessionAmplify.get('currentProjectId')}).forEach(
+    Tests.find({projectId: Session.get('currentProjectId')}).forEach(
       function(test){
         Tests.update({_id: test._id}, {$set: {members: [], status: "", comments:"", statusSetBy: ""}});
       }
@@ -247,7 +237,7 @@ function testStatusChange(e){
 
 Meteor.subscribe("projects");
 Deps.autorun(function () {
-  Meteor.subscribe("tests", SessionAmplify.get("currentProjectId"));
+  Meteor.subscribe("tests", Session.get("currentProjectId"));
 });
 Meteor.subscribe("currentUserData");
 
@@ -256,7 +246,7 @@ Template.project.helpers({
       return Projects.find();
     },
     selected : function(_id){
-      if (_id == SessionAmplify.get("currentProjectId"))
+      if (_id == Session.get("currentProjectId"))
         return "selected"
     }
 });
@@ -306,19 +296,19 @@ Template.commands.events({
 });
 
 Template.stats.tests = function(){
-  return Tests.find({projectId: SessionAmplify.get('currentProjectId')}).count();
+  return Tests.find({projectId: Session.get('currentProjectId')}).count();
 }
 
 Template.stats.passed = function(){
-  return Tests.find({projectId: SessionAmplify.get('currentProjectId'), status: "pass"}).count();
+  return Tests.find({projectId: Session.get('currentProjectId'), status: "pass"}).count();
 }
 
 Template.stats.failed = function(){
-  return Tests.find({projectId: SessionAmplify.get('currentProjectId'), status: "fail"}).count();
+  return Tests.find({projectId: Session.get('currentProjectId'), status: "fail"}).count();
 }
 
 Template.tests.test = function(){
-  return Tests.find({projectId: SessionAmplify.get('currentProjectId')}, {sort: {component: 1, capability: 1, steps: 1, _id: 1}});
+  return Tests.find({projectId: Session.get('currentProjectId')}, {sort: {component: 1, capability: 1, steps: 1, _id: 1}});
 }
 
 Template.tests.events({
@@ -343,7 +333,7 @@ Template.workspace.formatSteps = function(steps){
 Template.workspace.test = function(){
   if (Meteor.user().services)
     return Tests.find(
-      {projectId: SessionAmplify.get('currentProjectId'), members: Meteor.user().services.google.email},
+      {projectId: Session.get('currentProjectId'), members: Meteor.user().services.google.email},
       {sort: {component: 1, capability: 1, steps: 1, _id: 1}}
       );
 }

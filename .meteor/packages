@@ -4,7 +4,12 @@
 # but you can also edit it by hand.
 
 standard-app-packages
-insecure
-accounts-google
-accounts-ui
-amplify
+insecure@1.0.7
+accounts-google@1.3.2
+accounts-ui@1.3.1
+standard-minifier-css
+standard-minifier-js
+shell-server
+google-config-ui
+dynamic-import
+cultofcoders:persistent-session
