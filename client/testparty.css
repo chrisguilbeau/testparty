@@ -1,12 +1,12 @@
 html, body{
         margin: 0;
         padding: 0;
+        font-family: monospace;
 }
 
 .area-label{
     background-color: #f5f5f5;
     color: #999;
-    font-style: italic;
     border-bottom: 1px solid #ddd;
     padding: 0.2em;
 }
@@ -113,18 +113,10 @@ div.main, html, body{
 }
 
 .test{
-	padding: 0.2em;
+	padding: 0.5em;
     cursor: default;
     user-select: none;
-}
-
-.test:nth-child(even):hover,
-.test:hover{
-    background-color: #e5e5f5;
-}
-
-.test:nth-child(even){
-    background-color: #f5f5ff;
+    overflow: hidden;
 }
 
 .test.pass{
@@ -145,10 +137,10 @@ div.main, html, body{
 
 .work-test{
 	padding: 0.5em;
+    border-bottom: 1px solid #e5e5e5;
 }
 
 .work-test:nth-child(odd){
-	background-color: #f5f5f5;
 }
 
 .steps{

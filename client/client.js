@@ -186,6 +186,7 @@ function testCheckboxClicked(e){
     members.splice(emailIndex, 1);
   }
   Tests.update({_id: testId}, {$set: {members: members}});
+  return false;
 }
 
 function testCommentAdd(e){
