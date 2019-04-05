@@ -3,6 +3,14 @@ html, body{
         padding: 0;
 }
 
+.area-label{
+    background-color: #f5f5f5;
+    color: #999;
+    font-style: italic;
+    border-bottom: 1px solid #ddd;
+    padding: 0.2em;
+}
+
 .status-set-by{
     color: #999;
     font-size: 80%;
@@ -106,6 +114,17 @@ div.main, html, body{
 
 .test{
 	padding: 0.2em;
+    cursor: default;
+    user-select: none;
+}
+
+.test:nth-child(even):hover,
+.test:hover{
+    background-color: #e5e5f5;
+}
+
+.test:nth-child(even){
+    background-color: #f5f5ff;
 }
 
 .test.pass{

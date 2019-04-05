@@ -160,6 +160,18 @@ function testComponentEditCommit(e){
     comp.attr('contenteditable', false);
 }
 
+function testClicked(e){
+    var getTestDiv = function(){
+        var el = $(e.target);
+        if (el.hasClass('test'))
+            return el;
+        else
+            return el.parents('.test').first();
+        };
+    var testDiv = getTestDiv();
+    testDiv.find('input[type=checkbox]').click();
+}
+
 function testCheckboxClicked(e){
   var checkbox = $(e.target);
   var checked = checkbox.prop('checked');
@@ -264,7 +276,7 @@ function get_score(email){
     var pass = Tests.find({statusSetBy: email, status: 'pass'}).count();
     var fail = Tests.find({statusSetBy: email, status: 'fail'}).count();
     var num = pass + fail;
-    return num
+    return num;
 }
 
 Template.members.helpers({
@@ -313,6 +325,10 @@ Template.tests.test = function(){
 
 Template.tests.events({
   'click input[type=checkbox]': testCheckboxClicked
+});
+
+Template.tests.events({
+  'click .test': testClicked
 });
 
 Template.workspace.format = function(text){

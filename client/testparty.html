@@ -15,8 +15,14 @@
 			<div class="top-bottom">{{>members}}</div>
 		</div>
 		<div class="middle flex-row">
-			<div class="middle-left container">{{>tests}}</div>
-			<div class="middle-right container">{{>workspace}}</div>
+			<div class="middle-left flex-col">
+                <div class='tight area-label'>Test Areas</div>
+                <div class="flex-col container">{{>tests}}</div>
+            </div>
+			<div class="middle-left flex-col">
+                <div class='tight area-label'>Workspace</div>
+                <div class="flex-col container">{{>workspace}}</div>
+            </div>
 		</div>
 		{{/if}}
 		<div class="bottom flex-row tight center">
